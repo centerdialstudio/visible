@@ -9,6 +9,17 @@ var scrollTop = function() {
     }
 }
 
+var getOffset = function(el) {
+    var _x = 0;
+    var _y = 0;
+    while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+
 var size = function(el) {
     var w = window,
         d = document,
@@ -29,7 +40,7 @@ var visible = function(element, partial) {
         $d            = document,
         viewTop       = scrollTop(),
         viewBottom    = viewTop + size().height,
-        _top          = $t.offsetTop,
+        _top          = getOffset($t).top,
         _bottom       = _top + size($t).height,
         compareTop    = partial === true ? _bottom : _top,
         compareBottom = partial === true ? _top : _bottom;
